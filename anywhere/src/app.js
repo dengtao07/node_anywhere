@@ -28,7 +28,9 @@ const route = require('./helper/router');
 // });
 
 const server = http.createServer((req, res) => {
+	// 一进入页面因为req.url为空，所以访问的是项目启动的路径
 	const filePath = path.join(conf.root, req.url);
+	console.log(`filsePath: ${filePath}`);
 	route(req, res, filePath);
 });
 
