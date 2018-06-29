@@ -1,3 +1,4 @@
+const mime = require('./mime');
 const fs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
@@ -20,8 +21,9 @@ module.exports = async function (req, res, filePath) {
 		const stats = await stat(filePath);
 		// 如果filePath对应的属性时文件，就读出来
 		if(stats.isFile()) {
+			const contentType = mime(filePath);
 			res.statusCode = 200;
-			res.setHeader('Content-type', 'text/plain');
+			res.setHeader('Content-type', contentType);
 			fs.createReadStream(filePath).pipe(res);
 		} else if(stats.isDirectory()) {
 			// 如果filePth地址是文件夹
