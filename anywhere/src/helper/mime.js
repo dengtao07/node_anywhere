@@ -1,6 +1,10 @@
 const path = require('path');
 const mimeTypes = {
 	'.css': 'text/css',
+	// '.css': {
+	// 	text: 'text/css',
+	// 	icon: 'url'
+	// },
 	'.gif': 'image/gif',
 	'.html': 'text/html',
 	'.ico': 'image/x-icon',

@@ -14,6 +14,7 @@ console.log('2'+tplPath); // C:\Users\admin\Desktop\node_anywhere\anywhere\src\t
 // tplPath不能写相对路径，因为在不同的node启动目录下相对路径不一样
 const source = fs.readFileSync(tplPath); // 默认读出来的是buffer
 const template = Handlebars.compile(source.toString()); // template编译
+const compress = require('./compress');
 
 module.exports = async function (req, res, filePath) {
 	try {
@@ -24,7 +25,11 @@ module.exports = async function (req, res, filePath) {
 			const contentType = mime(filePath);
 			res.statusCode = 200;
 			res.setHeader('Content-type', contentType);
-			fs.createReadStream(filePath).pipe(res);
+			let rs = fs.createReadStream(filePath);
+			if (filePath.match(config.compress)) {
+				rs = compress(rs, req, res);
+			}
+			rs.pipe(res);
 		} else if(stats.isDirectory()) {
 			// 如果filePth地址是文件夹
 			const files = await readdir(filePath);
@@ -36,7 +41,13 @@ module.exports = async function (req, res, filePath) {
 				tittle: path.basename(filePath),
 				// root 是当前进程所在的路径,dir的意思是要访问的路径相对root的路径
 				dir: dir ? `/${dir}` : '',
-				files
+				files: files.map(file => {
+					return {
+						file,
+						// 示例，根据文件类型来加入前面的图标，后期改写
+						icon: mime(file)
+					};
+				})
 			};
 			console.log(`tittle:${data.tittle}`);
 			console.log(`files:${files}`);
@@ -50,4 +61,5 @@ module.exports = async function (req, res, filePath) {
 		return;
 	}
 };
+
 

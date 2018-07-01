@@ -22,7 +22,7 @@
 	这个filePath实际上是本地的路径，如：C:\Users\admin\Desktop\node_anywhere\anywhere，
 	直接传到html中，线上怎么能识别本地的绝对路径，所以线上的url始终都是以node服务器启动为根路径，
 	所以传入的路径也要是相对于node启动路径的根路径！ -->
-	<a href="{{../dir}}/{{this}}">{{this}}</a>
+	<a href="{{../dir}}/{{file}}">【{{icon}}】{{file}}</a>
 {{/each}}
 </body>
 </html>
